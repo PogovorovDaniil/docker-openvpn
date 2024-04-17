@@ -1,11 +1,12 @@
 services:
-  openvpn:
-    image: gigster/openvpn
-    volumes:
-      - ./volume:/etc/openvpn
-    ports:
-      - 1196:1194/udp
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun
+    openvpn:
+        image: gigster/openvpn
+        restart: unless-stopped
+        volumes:
+          - ./volume:/etc/openvpn
+        ports:
+          - 1194:1194/udp
+        cap_add:
+          - NET_ADMIN
+        devices:
+          - /dev/net/tun
