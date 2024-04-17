@@ -43,12 +43,12 @@ All client files are stored at ./volume/client.
 
 ### Client Commands:
 
-- Create a new user:
+- Create a new client (automatically builds a configuration file):
   ```bash
   ./client create {username}
   ```
 
-- Remove a user:
+- Remove a client:
   ```bash
   ./client remove {username}
   ```
