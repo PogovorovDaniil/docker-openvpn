@@ -24,17 +24,17 @@
 
 3. Создание и инициализация OpenVPN сервера:
    ```bash
-   ./server-create
+   ./server create
    ```
 
 4. Запуск сервера OpenVPN:
    ```bash
-   docker-compose up -d
+   ./server start
    ```
 
 5. Для остановки и удаления контейнеров сервера:
    ```bash
-   docker-compose down
+   ./server stop
    ```
 
 ## Управление клиентами

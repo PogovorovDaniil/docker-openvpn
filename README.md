@@ -24,17 +24,17 @@ Before using this project, you need to install Docker and Docker Compose. Follow
 
 3. Create and initialize the OpenVPN server:
    ```bash
-   ./server-create
+   ./server create
    ```
 
 4. Start the OpenVPN server:
    ```bash
-   docker-compose up -d
+   ./server start
    ```
 
 5. To stop and remove the server containers:
    ```bash
-   docker-compose down
+   ./server stop
    ```
 
 ## Client Management
