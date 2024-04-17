@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if ! [[ "$1" =~ ^[a-zA-Z0-9]+$ ]]; then
+	echo Invalid client name
+	exit 1
+fi
+
+if [ -f /etc/openvpn/easy-rsa/pki/issued/$1.crt ]; then
+        echo "$1 client already exist"
+        exit 1
+fi
+
+cd /etc/openvpn/easy-rsa
+
+echo $1 | /etc/openvpn/easy-rsa/easyrsa gen-req $1 nopass
+echo yes | /etc/openvpn/easy-rsa/easyrsa sign-req client $1
+
+/etc/openvpn/easy-rsa/easyrsa gen-crl
+cp /etc/openvpn/easy-rsa/pki/crl.pem /etc/openvpn/crl.pem
+
+/root/client-build $1

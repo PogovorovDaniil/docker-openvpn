@@ -1,0 +1,77 @@
+#!/bin/sh
+
+if [[ $(cat /etc/openvpn/initialized) == "1" ]]; then
+	echo Server already initialized
+	exit 0
+fi
+
+cp -r /usr/share/easy-rsa /etc/openvpn/
+
+EASYRSA_BATCH=1
+
+PUBLIC_IP=`wget -qO- http://ip1.dynupdate.no-ip.com`
+EASYRSA_PATH=/etc/openvpn/easy-rsa
+SERVER_PATH=/etc/openvpn/server
+CLIENT_PATH=/etc/openvpn/client
+PKI_PATH=$EASYRSA_PATH/pki
+EASYRSA=$EASYRSA_PATH/easyrsa
+
+mkdir $SERVER_PATH
+mkdir $CLIENT_PATH
+
+cd $EASYRSA_PATH
+$EASYRSA init-pki
+echo -e "\n" | $EASYRSA build-ca nopass
+$EASYRSA gen-dh
+
+echo server | $EASYRSA gen-req server nopass
+echo yes | $EASYRSA sign-req server server
+
+$EASYRSA gen-crl
+cp $PKI_PATH/crl.pem /etc/openvpn/crl.pem
+
+echo \
+"local 0.0.0.0
+proto $PROTOCOL
+port $PORT
+dev tun
+ca $PKI_PATH/ca.crt
+cert $PKI_PATH/issued/server.crt
+key $PKI_PATH/private/server.key
+dh $PKI_PATH/dh.pem
+server $SUBNET
+ifconfig-pool-persist $SERVER_PATH/ipp.txt
+topology subnet
+push \"redirect-gateway def1\"
+push \"dhcp-option DNS $DNS1\"
+push \"dhcp-option DNS $DNS2\"
+client-to-client
+keepalive 10 120
+auth SHA256
+cipher none
+max-clients 200
+persist-key
+persist-tun
+status $SERVER_PATH/openvpn-status.log
+log-append $SERVER_PATH/openvpn.log
+verb 3
+explicit-exit-notify 1
+crl-verify /etc/openvpn/crl.pem" > $SERVER_PATH/server.conf
+
+echo \
+"client
+dev tun
+proto udp
+remote $PUBLIC_IP $PORT
+remote-random
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+auth SHA256
+cipher none
+verb 3
+" > $SERVER_PATH/client_header
+
+echo 1 > /etc/openvpn/initialized

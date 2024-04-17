@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -it -v ./volume:/etc/openvpn gigster/openvpn /root/server-create

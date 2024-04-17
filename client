@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ "$1" == create ]]; then
+	docker run -it -v ./volume:/etc/openvpn gigster/openvpn /root/client-create $2
+	exit 0
+fi
+
+if [[ "$1" == remove ]]; then
+        docker run -it -v ./volume:/etc/openvpn gigster/openvpn /root/client-remove $2
+        exit 0
+fi
+
+if [[ "$1" == build ]]; then
+        docker run -it -v ./volume:/etc/openvpn gigster/openvpn /root/client-build $2
+        exit 0
+fi
+
+if [[ "$1" ==  list ]]; then
+        docker run -it -v ./volume:/etc/openvpn gigster/openvpn /root/client-list
+        exit 0
+fi
+
+echo -e "Client commands:\nclient create {username}\nclient remove {username}\nclient build {username}\nclient list\n\n"

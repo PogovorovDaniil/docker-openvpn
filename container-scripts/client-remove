@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ ! -f /etc/openvpn/easy-rsa/pki/issued/$1.crt ]; then
+        echo "$1 not found"
+        exit 1
+fi
+
+cd /etc/openvpn/easy-rsa
+
+echo yes | /etc/openvpn/easy-rsa/easyrsa revoke $1
+
+/etc/openvpn/easy-rsa/easyrsa gen-crl
+cp /etc/openvpn/easy-rsa/pki/crl.pem /etc/openvpn/crl.pem
+
+[ -f /etc/openvpn/client/$1.ovpn ] && rm /etc/openvpn/client/$1.ovpn

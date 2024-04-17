@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ ! -f /etc/openvpn/easy-rsa/pki/issued/$1.crt ]; then
+	echo "$1.crt not found"
+	exit 1
+fi
+
+if [ ! -f /etc/openvpn/easy-rsa/pki/private/$1.key ]; then
+        echo "$1.key not found"
+        exit 1
+fi
+
+cat /etc/openvpn/server/client_header > /etc/openvpn/client/$1.ovpn
+echo "<ca>" >> /etc/openvpn/client/$1.ovpn
+cat /etc/openvpn/easy-rsa/pki/ca.crt >> /etc/openvpn/client/$1.ovpn
+echo "</ca>" >> /etc/openvpn/client/$1.ovpn
+echo "<cert>" >> /etc/openvpn/client/$1.ovpn
+tail -n 20 /etc/openvpn/easy-rsa/pki/issued/$1.crt >> /etc/openvpn/client/$1.ovpn
+echo "</cert>" >> /etc/openvpn/client/$1.ovpn
+echo "<key>" >> /etc/openvpn/client/$1.ovpn
+cat /etc/openvpn/easy-rsa/pki/private/$1.key >> /etc/openvpn/client/$1.ovpn
+echo "</key>" >> /etc/openvpn/client/$1.ovpn
