@@ -6,8 +6,8 @@ if ! [[ "$1" =~ ^[a-zA-Z0-9]+$ ]]; then
 fi
 
 if [ -f /etc/openvpn/easy-rsa/pki/issued/$1.crt ]; then
-        echo "$1 client already exist"
-        exit 1
+    echo "$1 client already exist"
+    exit 1
 fi
 
 cd /etc/openvpn/easy-rsa

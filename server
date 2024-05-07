@@ -2,17 +2,17 @@
 
 if [[ "$1" == create ]]; then
 		docker run -it -v ./volume:/etc/openvpn gigster/openvpn /root/server-create
-        exit 0
+        exit $?
 fi
 
 if [[ "$1" == start ]]; then
         docker compose up -d
-        exit 0
+        exit $?
 fi
 
 if [[ "$1" == stop ]]; then
         docker compose down
-        exit 0
+        exit $?
 fi
 
 echo -e "Server commands:\nserver create\nserver start\nserver stop\n\n"

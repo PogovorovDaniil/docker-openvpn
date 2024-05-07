@@ -65,6 +65,6 @@ All client files are stored at ./volume/client.
 
 ## General Information
 
-After executing `./server-create`, the OpenVPN server will be initialized and ready for use. You can manage client profiles using the `./client` script, and start or stop the VPN server using Docker Compose.
+After executing `./server create`, the OpenVPN server will be initialized and ready for use. You can manage client profiles using the `./client` script, and start or stop the VPN server using Docker Compose.
 
 This project makes it easy to scale and manage a VPN server, providing a simple interface for handling clients.
