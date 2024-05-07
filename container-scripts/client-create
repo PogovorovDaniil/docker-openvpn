@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if ! [[ "$1" =~ ^[a-zA-Z0-9]+$ ]]; then
-	echo Invalid client name
-	exit 1
+    echo Invalid client name
+    exit 1
 fi
 
 if [ -f /etc/openvpn/easy-rsa/pki/issued/$1.crt ]; then
