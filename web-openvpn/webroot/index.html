@@ -81,7 +81,7 @@
                             return response.text();
                         })
                         .then(data => {
-                            this.clients = data.split(",");
+                            if(data) this.clients = data.split(",");
                         })
                         .catch(error => {
                             console.error('Error:', error);
