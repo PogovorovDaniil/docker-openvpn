@@ -10,9 +10,8 @@ namespace web_openvpn
     {
         static async Task Main(string[] _)
         {
-            string address = Environment.GetEnvironmentVariable("WEB_OPENVPN_ADDRESS") ?? "127.0.0.1";
             int port = int.TryParse(Environment.GetEnvironmentVariable("WEB_OPENVPN_PORT"), out int _port) ? _port : 8080;
-            WebServer webServer = new WebServer(address, port);
+            WebServer webServer = new WebServer("+", port);
 
             webServer.AddStaticFile("index.html", GetResourceFile("web_openvpn.webroot.index.html"));
             webServer.AddStaticFile("bootstrap.min.css", GetResourceFile("web_openvpn.webroot.bootstrap.min.css"));

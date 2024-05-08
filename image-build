@@ -1,5 +1,5 @@
 #!/bin/bash
 
-dotnet publish ./web-openvpn -r linux-x64 -c Release -o ./web-openvpn-publish
+dotnet publish ./web-openvpn -r linux-musl-x64 -c Release -o ./web-openvpn-publish
 
 docker build -t gigster/openvpn .
