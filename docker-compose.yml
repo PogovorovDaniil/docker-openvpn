@@ -1,6 +1,6 @@
 services:
     openvpn:
-        image: gigster/openvpn
+        image: gigster2000/openvpn
         restart: unless-stopped
         environment:
           - WEB_OPENVPN_PASSWORD=qwerty
