@@ -6,6 +6,7 @@ ENV PROTOCOL=udp \
     SUBNET="172.16.88.0 255.255.255.0"
 
 COPY container-scripts/* /root/
+COPY web-openvpn-publish/web-openvpn /root/
 
 RUN apk update && \
     apk upgrade && \

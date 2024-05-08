@@ -2,4 +2,6 @@
 
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
-openvpn --config /etc/openvpn/server/server.conf
+./server-create
+
+openvpn --config /etc/openvpn/server/server.conf & ./web-openvpn

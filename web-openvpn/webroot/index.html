@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Openvpn admin</title>
+    <link href="/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="app" class="container mt-5">
+        <div v-if="!authorized">
+            <input type="password" v-model="password" placeholder="Enter Password">
+            <button class="btn btn-primary" @click="authorize">Authorize</button>
+        </div>
+        <div v-else>
+            <h2>Openvpn Client List</h2>
+            <div class="mb-3">
+                <input type="text" v-model="newClientName" placeholder="Enter Name">
+                <button class="btn btn-success" @click="addClient">Add Client</button>
+            </div>
+            <ul class="list-group">
+                <li v-for="(client, index) in clients" class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ client }}
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" @click="downloadClient(client)">Download</button>
+                        <button class="btn btn-danger btn-sm" @click="confirmDelete(client)">Delete</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                password: '',
+                authorized: false,
+                token: '',
+                newClientName: '',
+                clients: []
+            },
+            methods: {
+                authorize() {
+                    fetch('/auth', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: this.password
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Authorization failed');
+                            }
+                            return response.text();
+                        })
+                        .then(data => {
+                            this.token = data;
+                            this.authorized = true;
+                            this.loadClients();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Authorization failed');
+                        });
+                },
+                loadClients() {
+                    fetch('/clients', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch clients');
+                            }
+                            return response.text();
+                        })
+                        .then(data => {
+                            this.clients = data.split(",");
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                },
+                addClient() {
+                    fetch('/clients', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.token}`
+                        },
+                        body: this.newClientName
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to add client');
+                            }
+                            this.clients.push(this.newClientName);
+                            this.newClientName = '';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                },
+                confirmDelete(clientName) {
+                    if (confirm('Are you sure you want to delete this client?')) {
+                        this.deleteClient(clientName);
+                    }
+                },
+                deleteClient(clientName) {
+                    fetch(`/clients/${clientName}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to delete client');
+                            }
+                            const index = this.clients.indexOf(clientName);
+                            if (index !== -1) {
+                                this.clients.splice(index, 1);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                },
+                downloadClient(clientName) {
+                    fetch(`/clients/${clientName}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to download client');
+                            }
+                            return response.text();
+                        })
+                        .then((data) => {
+                            const blob = new Blob([data], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = `${clientName}.ovpn`;
+                            link.click();
+                            URL.revokeObjectURL(url);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                },
+            }
+        });
+    </script>
+</body>
+</html>
