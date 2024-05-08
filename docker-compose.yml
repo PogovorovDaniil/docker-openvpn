@@ -6,6 +6,7 @@ services:
           - ./volume:/etc/openvpn
         ports:
           - 1194:1194/udp
+          - 5000:8080/tcp
         cap_add:
           - NET_ADMIN
         devices:
