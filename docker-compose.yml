@@ -2,7 +2,8 @@ services:
     openvpn:
         image: gigster/openvpn
         restart: unless-stopped
-        #working_dir: /root
+        environment:
+          - WEB_OPENVPN_PASSWORD=qwerty
         volumes:
           - ./volume:/etc/openvpn
         ports:

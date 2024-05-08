@@ -28,7 +28,7 @@ namespace web_openvpn
             requestHandler = new Dictionary<(string action, string method), Func<string[], string, Task<(string content, HttpStatusCode statusCode)>>>();
 
             password = "";
-            token = new Guid();
+            token = Guid.NewGuid();
         }
 
         public async Task Loop()
