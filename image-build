@@ -1,5 +1,0 @@
-#!/bin/bash
-
-dotnet publish ./web-openvpn -r linux-musl-x64 -c Release -o ./web-openvpn-publish
-
-docker build -t gigster2000/openvpn .
