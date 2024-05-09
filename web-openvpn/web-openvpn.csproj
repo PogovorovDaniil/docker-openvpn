@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>web_openvpn</RootNamespace>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="index.html" />
+    <None Remove="webroot\bootstrap.min.css" />
+    <None Remove="webroot\index.html" />
+    <None Remove="webroot\vue.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="webroot\bootstrap.min.css" />
+    <EmbeddedResource Include="webroot\index.html" />
+    <EmbeddedResource Include="webroot\vue.js" />
+  </ItemGroup>
+
+</Project>

@@ -34,7 +34,7 @@ echo \
 "local 0.0.0.0
 proto $PROTOCOL
 port $PORT
-dev tun
+dev $INTERFACE_TYPE
 ca $PKI_PATH/ca.crt
 cert $PKI_PATH/issued/server.crt
 key $PKI_PATH/private/server.key
@@ -60,8 +60,8 @@ crl-verify /etc/openvpn/crl.pem" > $SERVER_PATH/server.conf
 
 echo \
 "client
-dev tun
-proto udp
+dev $INTERFACE_TYPE
+proto $PROTOCOL
 remote $PUBLIC_IP $PORT
 remote-random
 resolv-retry infinite
