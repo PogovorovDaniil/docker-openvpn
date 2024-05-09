@@ -3,6 +3,12 @@ services:
         image: gigster2000/openvpn
         restart: unless-stopped
         environment:
+          - PROTOCOL=udp
+          - INTERFACE_TYPE=tun
+          - PORT=1194
+          - DNS1=1.1.1.1
+          - DNS2=1.0.0.1
+          - SUBNET=172.16.88.0 255.255.255.0
           - WEB_OPENVPN_PASSWORD=qwerty
         volumes:
           - ./volume:/etc/openvpn
